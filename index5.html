@@ -1,24 +1,7 @@
-
-<!doctype html>
-<!--
-Copyright 2016 Google Inc. All Rights Reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
 <html>
   <head>
-    <title>BBC micro:bit LED Display</title>
-    <meta name="description" content="Light up an LED Display with Web Bluetooth.">
+    <title>BBC micro:bit Accelerometer Chart</title>
+    <meta name="description" content="BBC micro:bit Accelerometer Chart">
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -46,9 +29,6 @@ limitations under the License.
     <link rel="import" href="./web/bower_components/paper-dialog/paper-dialog.html">
     <link rel="import" href="./web/bower_components/paper-button/paper-button.html">
     <link rel="import" href="./web/bower_components/paper-input/paper-input.html">
-
-    <!-- https://github.com/David-Mulder/paper-color-picker -->
-    <!--link rel="import" href="bower_components/paper-color-picker/paper-color-picker.html"-->
 
     <link rel="import" href="./web/bower_components/paper-styles/color.html">
     <link rel="stylesheet" href="./web/bower_components/paper-styles/demo.css">
@@ -109,7 +89,7 @@ limitations under the License.
   <body>
     <template id="template" is="dom-bind">
       <div id="cards">
-        <paper-card heading="BBC micro:bit LED Display">
+        <paper-card heading="BBC micro:bit Accelerometer Chart">
           <div class="card-content">
             <paper-toggle-button class="blue" id="connect">Connect</paper-toggle-button>
             <paper-progress id="progress" indeterminate></paper-progress>
@@ -137,33 +117,34 @@ limitations under the License.
 
        
       
-        var chart;
-		var chartData = [];
-		var chartCursor;
-		var day = 0;
-		var firstDate = new Date();
-		var str;
+    let chart;
+		let chartData = [];
+		let chartCursor;
+		let day = 0;
+		let firstDate = new Date();
+		let str;
 
-		var AcceleratorX = 0;
-		var AcceleratorY = 0;
-		var AcceleratorZ = 0;
+		let AcceleratorX = 0;
+		let AcceleratorY = 0;
+		let AcceleratorZ = 0;
+    let connect = false;
 
-      	function generateChartData() {
-		    for (day = 0; day < 5; day++) {
-		        var newDate = new Date(firstDate);
-		        newDate.setTime(newDate.getTime() + day);
+    function generateChartData() {
+		  for (day = 0; day < 5; day++) {
+		    let newDate = new Date(firstDate);
+		    newDate.setTime(newDate.getTime() + day);
 
-		        var tempX = Math.round(Math.random() * 40) - 20;
-		        var tempY = Math.round(Math.random() * 40) - 20;
-		        var tempZ = Math.round(Math.random() * 40) - 20;
+		    let tempX = Math.round(Math.random() * 40) - 20;
+		    let tempY = Math.round(Math.random() * 40) - 20;
+		    let tempZ = Math.round(Math.random() * 40) - 20;
 
-		        chartData.push({
-		            date: newDate,
-		            tempX: AcceleratorX,
-		            tempY: AcceleratorY,
-		            tempZ: AcceleratorZ
-		        });
-		    }
+		    chartData.push({
+          date: newDate,
+		      tempX: AcceleratorX,
+		      tempY: AcceleratorY,
+		      tempZ: AcceleratorZ
+		    });
+		  }
 		}
 
 		// create chart
@@ -187,7 +168,7 @@ limitations under the License.
 
 		    // AXES
 		    // category
-		    var categoryAxis = chart.categoryAxis;
+		    let categoryAxis = chart.categoryAxis;
 		    categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
 		    categoryAxis.minPeriod = "ss"; // our data is daily, so we set minPeriod to DD
 		    categoryAxis.dashLength = 1;
@@ -195,13 +176,13 @@ limitations under the License.
 		    categoryAxis.axisColor = "#DADADA";
 
 		    // value                
-		    var valueAxis = new AmCharts.ValueAxis();
+		    let valueAxis = new AmCharts.ValueAxis();
 		    valueAxis.axisAlpha = 0.2;
 		    valueAxis.dashLength = 1;
 		    chart.addValueAxis(valueAxis);
 
 		    // GRAPH
-		    var graphx = new AmCharts.AmGraph();
+		    let graphx = new AmCharts.AmGraph();
 		    graphx.title = "X line";
 		    graphx.valueField = "tempX";
 		    graphx.bullet = "round";
@@ -214,7 +195,7 @@ limitations under the License.
 		    graphx.type =  "smoothedLine";
 		    chart.addGraph(graphx);
 
-		    var graphy = new AmCharts.AmGraph();
+		    let graphy = new AmCharts.AmGraph();
 		    graphy.title = "Y line";
 		    graphy.valueField = "tempY";
 		    graphy.bullet = "round";
@@ -227,7 +208,7 @@ limitations under the License.
 		    graphy.type =  "smoothedLine";
 		    chart.addGraph(graphy);
 
-		    var graphz = new AmCharts.AmGraph();
+		    let graphz = new AmCharts.AmGraph();
 		    graphz.title = "Y line";
 		    graphz.valueField = "tempZ";
 		    graphz.bullet = "round";
@@ -246,7 +227,7 @@ limitations under the License.
 		    chart.addChartCursor(chartCursor);
 
 		    // SCROLLBAR
-		    var chartScrollbar = new AmCharts.ChartScrollbar();
+		    let chartScrollbar = new AmCharts.ChartScrollbar();
 		    chartScrollbar.graph = graphx;
 		    chartScrollbar.scrollbarHeight = 40;
 		    chartScrollbar.color = "#FFFFFF";
@@ -258,28 +239,31 @@ limitations under the License.
 		    
 		    // set up the chart to update every second
 		    setInterval(function () {
-		        // normally you would load new datapoints here,
-		        // but we will just generate some random values
-		        // and remove the value from the beginning so that
-		        // we get nice sliding graph feeling
-		        
-		        // remove datapoint from the beginning
-		        chart.dataProvider.shift();
-		        
-		        // add new one at the end
-		        day++;
-		        var firstDate1 = new Date();
-		        var newDate = new Date(firstDate1);
-		        newDate.setTime(newDate.getTime() +  day);
 
-		        //console.log('AcceleratorX:' + AcceleratorX);
-		        chart.dataProvider.push({
-		            date: newDate,
-		            tempX: AcceleratorX,
-		            tempY: AcceleratorY,
-		            tempZ: AcceleratorZ
-		        });
-		        chart.validateData();
+            if(connect) {
+  		        // normally you would load new datapoints here,
+  		        // but we will just generate some random values
+  		        // and remove the value from the beginning so that
+  		        // we get nice sliding graph feeling
+  		        
+  		        // remove datapoint from the beginning
+  		        chart.dataProvider.shift();
+  		        
+  		        // add new one at the end
+  		        day++;
+  		        let firstDate1 = new Date();
+  		        let newDate = new Date(firstDate1);
+  		        newDate.setTime(newDate.getTime() +  day);
+
+  		        //console.log('AcceleratorX:' + AcceleratorX);
+  		        chart.dataProvider.push({
+  		            date: newDate,
+  		            tempX: AcceleratorX,
+  		            tempY: AcceleratorY,
+  		            tempZ: AcceleratorZ
+  		        });
+  		        chart.validateData();
+            }
 		    }, 1000);
 		});
 
@@ -316,6 +300,8 @@ limitations under the License.
           commandService = null;
           writeCharacteristic = null;
           writeCharacteristicPeriod = null;
+          connectToggle.checked = false;
+          connect = false;
         }
 
         /**
@@ -417,12 +403,14 @@ limitations under the License.
               	writeCharacteristicPeriod = PeriodCharacteristic;
               	initPeriod();
                 progress.hidden = true;
+                connect = true;
               })
     
    
               .catch(handleError);
             } else {
               progress.hidden = true;
+              connect = true;
             }
           }
         });
