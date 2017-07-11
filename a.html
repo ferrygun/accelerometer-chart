@@ -11,7 +11,7 @@
 
 
     <script src="./web/bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
-
+    <script src="https://apis.google.com/js/client.js" type="text/javascript">
     <!-- Polymer components -->
     <link rel="import" href="./web/bower_components/paper-progress/paper-progress.html">
     <link rel="import" href="./web/bower_components/paper-button/paper-button.html">
@@ -127,6 +127,11 @@
 
     <script>
       'use strict';
+      gapi.client.setApiKey('AIzaSyDV5_Ca9cEVSFaiLkyzGIcDcbnV_4CiA0o');
+        gapi.client.load('urlshortener', 'v1', function() {
+            //document.getElementById("result").innerHTML = "";
+        });
+	     
       document.addEventListener('WebComponentsReady', () => {
         let connectToggle = document.querySelector('#connect');
         let progress = document.querySelector('#progress');
