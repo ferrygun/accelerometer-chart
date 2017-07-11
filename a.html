@@ -127,11 +127,7 @@
 
     <script>
       'use strict';
-      gapi.client.setApiKey('AIzaSyDV5_Ca9cEVSFaiLkyzGIcDcbnV_4CiA0o');
-        gapi.client.load('urlshortener', 'v1', function() {
-            //document.getElementById("result").innerHTML = "";
-        });
-	     
+           
       document.addEventListener('WebComponentsReady', () => {
         let connectToggle = document.querySelector('#connect');
         let progress = document.querySelector('#progress');
@@ -168,8 +164,15 @@
           document.getElementById("no-bluetooth").open();
         }
 
-
-
+	
+	 function load() {
+         	gapi.client.setApiKey('AIzaSyDV5_Ca9cEVSFaiLkyzGIcDcbnV_4CiA0o');
+		gapi.client.load('urlshortener', 'v1', function() {
+		    //document.getElementById("result").innerHTML = "";
+		});
+	 }
+         window.onload = load;
+	      
 		let button = document.querySelector('#buttonsend');
         button.addEventListener('click', makeRequest);
 
